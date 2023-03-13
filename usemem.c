@@ -649,7 +649,7 @@ static void output_statistics(unsigned long unit_bytes, const char *intro)
 		(stop.tv_usec - start_time.tv_usec);
 	throughput = ((unit_bytes * 1000000ULL) >> 10) / delta_us;
 	len = snprintf(buf, sizeof(buf),
-			"%s%lu bytes / %lu usecs = %lu KB/s\n",
+			"%s %lu bytes / %lu usecs = %lu KB/s\n",
 			intro, unit_bytes, delta_us, throughput);
 	fflush(stdout);
 	if (write(1, buf, len) != len)

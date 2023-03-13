@@ -1,6 +1,13 @@
 #!/bin/sh
 
+echo "Input the pid"
+read pid            
+echo "Current Process : ${pid}"                                          
+echo ${pid} > /sys/fs/cgroup/vm/tasks/cgroup.procs            
+echo $((2* 1024* 1024* 1024)) > /sys/fs/cgroup/vm/memory.high 
+echo $((2* 1024* 1024* 1024)) > /sys/fs/cgroup/vm/memory.max 
+
 . ./hw_vars
 
-[ -n "$unit_size" ] || unit_size=$((mem / 2))
-$USEMEM -t $nr_task --random $((unit_size / nr_task))
+[ -n "$unit_size" ] || unit_size=$((10*1024*1024*1024))
+$USEMEM -t $((16)) --random $((unit_size / 16))

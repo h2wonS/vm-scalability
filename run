@@ -1,5 +1,9 @@
 #!/bin/sh
 
+read pid
+echo ${pid} > /sys/fs/cgroup/vm/tasks/cgroup.procs
+echo $((2* 1024* 1024* 1024)) > /sys/fs/cgroup/vm/memory.high
+
 ################################################################################
 # options 
 
@@ -115,10 +119,10 @@ do
 	save_stats $OUT_DIR/$testcase
 
 	# run again to collect perf stats
-	perf stat -a -e $perf_events -o $OUT_DIR/$testcase/perf-stat ./$testcase
+	/home/hwshin/linux/tools/perf/perf stat -a -e $perf_events -o $OUT_DIR/$testcase/perf-stat ./$testcase
 
-	perf record -afg -o $TMPFS_MNT/perf.data ./$testcase 2>/dev/null || continue
-	perf report -g fractal,5 -i $TMPFS_MNT/perf.data 2>/dev/null > $OUT_DIR/$testcase/perf-report
+	/home/hwshin/linux/tools/perf/perf record -afg -o $TMPFS_MNT/perf.data ./$testcase 2>/dev/null || continue
+	/home/hwshin/linux/tools/perf/perf report -g fractal,5 -i $TMPFS_MNT/perf.data 2>/dev/null > $OUT_DIR/$testcase/perf-report
 done
 
 ./elapsed-time $OUT_DIR
