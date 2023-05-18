@@ -1,7 +1,6 @@
 #!/bin/sh
 
-echo "Input the pid"
-read pid            
+read pid
 echo "Current Process : ${pid}"                                          
 echo ${pid} > /sys/fs/cgroup/vm/tasks/cgroup.procs            
 echo $((2* 1024* 1024* 1024)) > /sys/fs/cgroup/vm/memory.high 
@@ -9,5 +8,8 @@ echo $((2* 1024* 1024* 1024)) > /sys/fs/cgroup/vm/memory.max
 
 . ./hw_vars
 
-[ -n "$unit_size" ] || unit_size=$((10*1024*1024*1024))
-$USEMEM -t $((16)) --random $((unit_size / 16))
+dev_util=$1
+workload_size=$((${dev_util} / 16))
+echo "per therad Workload Size= $workload_size"
+[ -n "$unit_size" ] || unit_size=${dev_util}
+$USEMEM -t $((16)) -x -y -O --touch-alloc -r $((1000)) -T $((3000)) -R ${workload_size}
